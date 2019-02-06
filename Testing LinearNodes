@@ -1,0 +1,255 @@
+
+/**
+ * 
+ * @author Allen Austin - CS 320 - Data Structures Programming Assignment 3 -
+ *         Sets (Linked Lists) Program implements a Set data structure using a
+ *         singly linked list implementation and a driver program that will test
+ *         this implementation.
+ *
+ */
+public class LinearNode<T> implements Comparable<T> 
+{
+	
+	private T value;
+	private LinearNode<T> nextRef;
+
+	/**
+	 * @return
+	 */
+	public T getValue() 
+	{
+		return value;
+	}
+
+	/**
+	 * @param value
+	 */
+	public void setValue(T value) 
+	{
+		this.value = value;
+	}
+
+	/**
+	 * @return
+	 */
+	public LinearNode<T> getNextRef() 
+	{
+		return nextRef;
+	}
+
+	/**
+	 * @param ref
+	 */
+	public void setNextRef(LinearNode<T> ref)
+	{
+		this.nextRef = ref;
+	}
+
+	//compareTo method gives either true or false if value is represented in Set
+	//and can be output if return is 1
+	public int compareTo(T arg) 
+	{
+		if (arg == this.value)
+		{
+			
+			return 0;
+		} 
+		else 
+		{
+			return 1;
+		}
+	}
+}
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+
+/**
+ * 
+ * @author Allen Austin - CS 320 - Data Structures Programming Assignment 3 -
+ *         Sets (Linked Lists) Program implements a Set data structure using a
+ *         singly linked list implementation and a driver program that will test
+ *         this implementation.
+ *
+ */
+//Set class implements a singly linked which should be able to be: 
+//added to, deleted from, and returned to user. 
+public class Set<T> 
+{
+	//Creates head and tail Nodes.
+	private LinearNode<T> head;
+	private LinearNode<T> tail;
+	
+	//Implements the Set interface
+	//Creates a HashSet that cannot have duplicates
+	//iteration set to 0
+	private HashSet set = null;
+	private int i = 0;
+
+	//Implementation of set interface as HashSet()
+	//arraylist used for integers in set
+	public Set() 
+	{
+		new ArrayList<Integer>();
+		set = new HashSet();
+	}
+
+	//add method adds the element x to the collection. The resulting collection should not
+	//contain any duplicate values.
+	public void add(T element) 
+	{
+
+		//New linear node created
+		LinearNode<T> nd = new LinearNode<T>();
+		nd.setValue(element);
+		
+		// check if the list is empty
+		if (head == null) 
+		{
+			// since there is only one element, both head and
+			// tail points to the same object.
+			head = nd;
+			tail = nd;
+		} 
+		else 
+		{
+			// set current tail next link to new node
+			tail.setNextRef(nd);
+			// set tail as newly created node
+			tail = nd;
+		}
+		// list.add();
+		set.add((Integer) nd.getValue());
+		System.out.println(toString());
+	}
+
+	//deletes the integer x from the set
+	public void delete(T element) 
+	{
+		set.remove(element);
+		System.out.println(toString());
+	}
+
+	//returns true if the integer x exists in the set and false otherwise
+	public boolean exists(T element) 
+	{
+		if (set.contains(element)) 
+		{
+			return true;
+		} 
+		else
+		{
+			return false;
+		}
+	}
+
+	//returns a string representing the set as a comma-separated list encased by braces. 
+	//Output is formatted to return array inside brackets
+	public String toString() 
+	{
+		Iterator iter = set.iterator();
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("{");
+		while (iter.hasNext()) 
+		{
+			sb.append(iter.next().toString());
+			if (i == 0) 
+			{
+				i++;
+			} else 
+			{
+				sb.append(", ");
+			}
+		}
+		sb.append("}");
+		
+		String str = sb.toString().replaceAll(", }", " }");
+		if (set.size() == 0) 
+		{
+			str = "";
+		}
+		return str;
+	}
+
+}
+
+import java.util.Scanner;
+
+/**
+ * 
+ * @author Allen Austin - CS 320 - Data Structures Programming Assignment 3 -
+ *         Sets (Linked Lists) Program implements a Set data structure using a
+ *         singly linked list implementation and a driver program that will test
+ *         this implementation.
+ *
+ */
+public class Test 
+{
+
+	public static void main(String[] arg) 
+	{
+		System.out.println("CS 320");
+		System.out.println("Name: Allen Austin");
+		System.out.println("Programming Assignment 3 - Sets");
+		System.out.println("");
+
+		Scanner scan = new Scanner(System.in);
+
+		//Defines a new list for integers to be output to user
+		String exit = "  ";
+		Set<Integer> setList = new Set<Integer>();
+		String choice = null;
+		
+		//do-while loop to return values while user 
+		//enters command to add, delete, and check existence in set
+		do 
+		{
+			System.out.print("Enter a Command: ");
+			choice = scan.nextLine();
+			String[] choiceArr = choice.split("\\s+");
+			
+			//command 'add' to insert integer to display through toString method
+			if (choice.contains("add")) 
+			{
+				setList.add(Integer.parseInt(choiceArr[1]));
+			} 
+			//command 'del' to delete integer to display through toString method
+			else if (choice.contains("del")) 
+			{
+				setList.delete(Integer.parseInt(choiceArr[1]));
+			} 
+			//command 'exists' to display through toString method
+			else if (choice.contains("exists")) 
+			{
+				boolean isExist = setList.exists(Integer.parseInt(choiceArr[1]));
+
+			if (isExist) 
+			{
+					System.out.println("exists " + Integer.parseInt(choiceArr[1]));
+					System.out.println(isExist);
+			} 
+			else 
+			{
+					System.out.println("exists " + Integer.parseInt(choiceArr[1]));
+					System.out.println(isExist);
+			}
+
+			} 
+			else if (choice.contains("exit")) 
+			{
+				exit = choice;
+				break;
+			} 
+			else 
+			{
+				System.out.println("Please Enter a Valid Command!");
+			}
+		} 
+		//If 'exit' is entered program will stop scanning.
+		while (choice != null && !choice.equals("") && !choice.equalsIgnoreCase("exit"));
+
+		System.out.println("Goodbye!");
+		scan.close();
+	}
+}
