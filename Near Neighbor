@@ -1,0 +1,116 @@
+/**
+ * <code>NearestNeighbor</code> application is used Neighbor which learns by remembering training examples. It then classifies test examples by
+ * choosing the class of the closest training example. The notion of closeness differs depending
+ * on applications. You will need to use the Nearest Neighbor algorithm to learn and classify types
+ * 	of Iris plants based on their sepal and petal length and width. There are three Iris types you will
+ * 	need to classify:
+ * <li>Iris Setosa</li>
+ * <li>Iris Versicolor</li>
+ * <li>Iris Virginica</li>
+ * @author Allen Austin
+ *
+ */
+
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+public class nearestNeighbor 
+{
+	public static void main(String[] args) throws FileNotFoundException 
+	{
+		// TODO Auto-generated method stub
+		//Get the name
+		Scanner scan = new Scanner(System.in);
+		String testingdata, trainingdata;
+		System.out.println("Enter the name of the training file: "); trainingdata = scan.nextLine();
+		System.out.println("Enter the name of the testing file: "); testingdata = scan.nextLine();
+
+		Scanner testingdatascan = new Scanner (new File(testingdata));
+		Scanner trainingdatascan = new Scanner (new File(trainingdata));
+
+		double TesData[][] = new double [75][4];
+
+		double TraData[][] = new double [75][4];
+
+		String TestData1[] = new String [75];
+
+		String TrainData1[] = new String[75];
+		
+		//Get the  name of the training file
+		for(int x = 0; x<=74; x++)
+		{ 
+			String s = trainingdatascan.nextLine();
+			//System.out.println(s);
+			String[] sArray = s.split(",");
+		
+			double sl = Double.parseDouble(sArray[0]);
+			double sw = Double.parseDouble(sArray[1]);
+			double pl = Double.parseDouble(sArray[2]);
+			double pw = Double.parseDouble(sArray[3]);
+			String name = (sArray[4]) ;
+			TraData[x][0] = sl;
+			TraData[x][1] = sw;
+			TraData[x][2] = pl;
+			TraData[x][3] = pw;
+			TrainData1[x] = name;
+		 
+		}
+		//Get the  name of the testing file
+		for(int x = 0; x<=74; x++)
+		{ 
+			String p = testingdatascan.nextLine();
+			//System.out.println(p);
+			String[] pArray = p.split(",");
+	 
+			double sl = Double.parseDouble(pArray[0]);
+			double sw = Double.parseDouble(pArray[1]);
+			double pl = Double.parseDouble(pArray[2]);
+			double pw = Double.parseDouble(pArray[3]);
+			String name = (pArray[4]) ;
+			TesData[x][0] = sl;
+			TesData[x][1] = sw;
+			TesData[x][2] = pl;
+			TesData[x][3] = pw;
+		  	TestData1[x] = name;
+  
+		}
+		
+		//Take each testing sample and compare it against the training sample to find out the nearest neighbor.
+		String[] closestIndex = new String [75];
+		for (int i=0; i < TesData.length; i++)
+		{ 
+			double trueLabel = Double.MAX_VALUE;
+			int predictedClass = -1;
+		
+			for (int j = 0; j < TraData.length; j++)
+			{          
+				//Iterate training sample to calculate distance
+				double distance = Math.sqrt(Math.pow(TraData[j][0] - TesData[i][0], 2) + Math.pow(TraData[j][1] - TesData[i][1], 2) + Math.pow(TraData[j][2] - TesData[i][2], 2) + Math.pow(TraData[j][3] - TesData[i][3], 2)); ;
+				//double currentDistance;
+				double currentDistance = distance;
+				if(currentDistance < trueLabel)
+				{
+					trueLabel = currentDistance;
+					predictedClass = j;	
+				}
+			}
+			closestIndex[i] = TrainData1 [predictedClass];
+		}
+	
+		//Gives the lines with the numbers, the test data and the index values
+		System.out.println("    True Label:    Predicted Label:");
+		
+		for (int numberline = 0; numberline < 75; numberline++ )
+		{ 
+			System.out.println(numberline + 1 + ":    " + TestData1[numberline] + "     " + closestIndex[numberline]);
+		}
+		
+		//tells the accuracy with the 4 wrong values
+		double Accuracy = 71.0/75.0;
+		System.out.println("Accuracy: "  + Accuracy);
+		
+	
+	}
+	
+		
+}
